@@ -2,18 +2,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public Animator Animator { get; private set; }
+    public Rigidbody2D Rigidbody { get; private set; }
+
     private PlayerInputSet _input;
     private StateMachine _stateMachine;
-    public Animator Animator { get; private set; }
 
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
 
     public Vector2 MoveInput { get; private set; }
 
+    [Header("Movement details")]
+    public float moveSpeed;
+
     private void Awake()
     {
         Animator = GetComponentInChildren<Animator>();
+        Rigidbody = GetComponent<Rigidbody2D>();
 
         _stateMachine = new StateMachine();
         _input = new PlayerInputSet();
@@ -43,5 +49,10 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         _input.Disable();
+    }
+
+    public void SetVelocity(float xVelocity, float yVelocity)
+    {
+        Rigidbody.linearVelocity = new Vector2(xVelocity, yVelocity);
     }
 }

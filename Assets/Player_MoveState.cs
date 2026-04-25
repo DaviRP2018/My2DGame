@@ -11,5 +11,7 @@ public class Player_MoveState : EntityState
 
         if (Player.MoveInput.x == 0)
             StateMachine.ChangeState(Player.IdleState);
+
+        Player.SetVelocity(Player.MoveInput.x * Player.moveSpeed, Rigidbody2D.linearVelocity.y);
     }
 }

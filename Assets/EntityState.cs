@@ -2,11 +2,12 @@ using UnityEngine;
 
 public abstract class EntityState
 {
-    protected Animator Animator;
-    protected string AnimBoolName;
     protected Player Player;
-
     protected StateMachine StateMachine;
+    protected string AnimBoolName;
+
+    protected Animator Animator;
+    protected Rigidbody2D Rigidbody2D;
 
     public EntityState(Player player, StateMachine stateMachine, string animBoolName)
     {
@@ -15,6 +16,7 @@ public abstract class EntityState
         AnimBoolName = animBoolName;
 
         Animator = player.Animator;
+        Rigidbody2D = Player.Rigidbody;
     }
 
     public virtual void Enter()
