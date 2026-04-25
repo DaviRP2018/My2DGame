@@ -40,6 +40,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        _stateMachine.CurrentState.Update();
+        _stateMachine.UpdateActiveState();
     }
 }

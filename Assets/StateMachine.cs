@@ -16,4 +16,9 @@ public class StateMachine
         CurrentState = newState;
         CurrentState.Enter();
     }
+
+    public void UpdateActiveState()
+    {
+        CurrentState.Update();
+    }
 }
