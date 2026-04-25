@@ -52,6 +52,7 @@
     <Compile Include="Assets\StateMachine.cs" />
     <Compile Include="Assets\Player_MoveState.cs" />
     <Compile Include="Assets\EntityState.cs" />
+    <Compile Include="Assets\InputSystem\PlayerInputSet.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
