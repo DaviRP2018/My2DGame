@@ -1,7 +1,8 @@
-public class Player_IdleState : EntityState
+public class Player_IdleState : Player_GroundedState
 {
-    public Player_IdleState(Player player, StateMachine stateMachine, string animBoolName) : base(
-        player, stateMachine, animBoolName)
+    public Player_IdleState(Player entityPlayer, StateMachine entityStateMachine,
+        string animBoolName) : base(
+        entityPlayer, entityStateMachine, animBoolName)
     {
     }
 
@@ -9,7 +10,7 @@ public class Player_IdleState : EntityState
     {
         base.Update();
 
-        if (Player.MoveInput.x != 0)
-            StateMachine.ChangeState(Player.MoveState);
+        if (EntityPlayer.MoveInput.x != 0)
+            EntityStateMachine.ChangeState(EntityPlayer.MoveState);
     }
 }

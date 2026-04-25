@@ -2,34 +2,38 @@ using UnityEngine;
 
 public abstract class EntityState
 {
-    protected Player Player;
-    protected StateMachine StateMachine;
+    private static readonly int YVelocity = Animator.StringToHash("yVelocity");
+    protected Player EntityPlayer;
+    protected StateMachine EntityStateMachine;
     protected string AnimBoolName;
 
-    protected Animator Animator;
-    protected Rigidbody2D Rigidbody2D;
+    protected Animator EntityAnimator;
+    protected Rigidbody2D EntityRigidbody;
+    protected PlayerInputSet InputSet;
 
-    public EntityState(Player player, StateMachine stateMachine, string animBoolName)
+    public EntityState(Player entityPlayer, StateMachine entityStateMachine, string animBoolName)
     {
-        Player = player;
-        StateMachine = stateMachine;
+        EntityPlayer = entityPlayer;
+        EntityStateMachine = entityStateMachine;
         AnimBoolName = animBoolName;
 
-        Animator = player.Animator;
-        Rigidbody2D = Player.Rigidbody;
+        EntityAnimator = entityPlayer.PlayerAnimator;
+        EntityRigidbody = entityPlayer.PlayerRigidbody;
+        InputSet = entityPlayer.PlayerInputActions;
     }
 
     public virtual void Enter()
     {
-        Animator.SetBool(AnimBoolName, true);
+        EntityAnimator.SetBool(AnimBoolName, true);
     }
 
     public virtual void Update()
     {
+        EntityAnimator.SetFloat(YVelocity, EntityRigidbody.linearVelocity.y);
     }
 
     public virtual void Exit()
     {
-        Animator.SetBool(AnimBoolName, false);
+        EntityAnimator.SetBool(AnimBoolName, false);
     }
 }

@@ -1,7 +1,8 @@
-public class Player_MoveState : EntityState
+public class Player_MoveState : Player_GroundedState
 {
-    public Player_MoveState(Player player, StateMachine stateMachine, string animBoolName) : base(
-        player, stateMachine, animBoolName)
+    public Player_MoveState(Player entityPlayer, StateMachine entityStateMachine,
+        string animBoolName) : base(
+        entityPlayer, entityStateMachine, animBoolName)
     {
     }
 
@@ -9,9 +10,10 @@ public class Player_MoveState : EntityState
     {
         base.Update();
 
-        if (Player.MoveInput.x == 0)
-            StateMachine.ChangeState(Player.IdleState);
+        if (EntityPlayer.MoveInput.x == 0)
+            EntityStateMachine.ChangeState(EntityPlayer.IdleState);
 
-        Player.SetVelocity(Player.MoveInput.x * Player.moveSpeed, Rigidbody2D.linearVelocity.y);
+        EntityPlayer.SetVelocity(EntityPlayer.MoveInput.x * EntityPlayer.moveSpeed,
+            EntityRigidbody.linearVelocity.y);
     }
 }

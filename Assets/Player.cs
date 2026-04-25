@@ -2,32 +2,35 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Animator Animator { get; private set; }
-    public Rigidbody2D Rigidbody { get; private set; }
+    public Animator PlayerAnimator { get; private set; }
+    public Rigidbody2D PlayerRigidbody { get; private set; }
 
-    private PlayerInputSet _input;
+    public PlayerInputSet PlayerInputActions { get; private set; }
     private StateMachine _stateMachine;
 
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
-
-    public Vector2 MoveInput { get; private set; }
+    public Player_JumpState JumpState { get; private set; }
+    public Player_FallState FallState { get; private set; }
 
     [Header("Movement details")]
     public float moveSpeed;
-
+    public float jumpForce = 5;
     private bool _facingRight = true;
+    public Vector2 MoveInput { get; private set; }
 
     private void Awake()
     {
-        Animator = GetComponentInChildren<Animator>();
-        Rigidbody = GetComponent<Rigidbody2D>();
+        PlayerAnimator = GetComponentInChildren<Animator>();
+        PlayerRigidbody = GetComponent<Rigidbody2D>();
 
         _stateMachine = new StateMachine();
-        _input = new PlayerInputSet();
+        PlayerInputActions = new PlayerInputSet();
 
         IdleState = new Player_IdleState(this, _stateMachine, "idle");
         MoveState = new Player_MoveState(this, _stateMachine, "move");
+        JumpState = new Player_JumpState(this, _stateMachine, "jumpFall");
+        FallState = new Player_FallState(this, _stateMachine, "jumpFall");
     }
 
     private void Start()
@@ -42,20 +45,21 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.Enable();
+        PlayerInputActions.Enable();
 
-        _input.Player.Movement.performed += context => MoveInput = context.ReadValue<Vector2>();
-        _input.Player.Movement.canceled += _ => MoveInput = Vector2.zero;
+        PlayerInputActions.Player.Movement.performed +=
+            context => MoveInput = context.ReadValue<Vector2>();
+        PlayerInputActions.Player.Movement.canceled += _ => MoveInput = Vector2.zero;
     }
 
     private void OnDisable()
     {
-        _input.Disable();
+        PlayerInputActions.Disable();
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
     {
-        Rigidbody.linearVelocity = new Vector2(xVelocity, yVelocity);
+        PlayerRigidbody.linearVelocity = new Vector2(xVelocity, yVelocity);
         HandleFlip(xVelocity);
     }
 
