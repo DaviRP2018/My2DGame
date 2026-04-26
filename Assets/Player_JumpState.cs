@@ -1,4 +1,4 @@
-public class Player_JumpState : EntityState
+public class Player_JumpState : Player_AirState
 {
     public Player_JumpState(Player entityPlayer, StateMachine entityStateMachine,
         string animBoolName) : base(entityPlayer, entityStateMachine, animBoolName)
@@ -9,6 +9,7 @@ public class Player_JumpState : EntityState
     {
         base.Enter();
 
+        // TODO: O cara colocou X aqui, mas acho que é Y
         EntityPlayer.SetVelocity(EntityRigidbody.linearVelocity.y, EntityPlayer.jumpForce);
     }
 
