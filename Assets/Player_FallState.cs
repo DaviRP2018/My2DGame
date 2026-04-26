@@ -9,7 +9,10 @@ public class Player_FallState : Player_AirState
     {
         base.Update();
 
-        if (EntityPlayer.groundDetected)
+        if (EntityPlayer.GroundDetected)
             EntityStateMachine.ChangeState(EntityPlayer.IdleState);
+
+        if (EntityPlayer.WallDetected)
+            EntityStateMachine.ChangeState(EntityPlayer.WallSlideState);
     }
 }

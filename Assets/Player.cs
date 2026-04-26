@@ -12,19 +12,25 @@ public class Player : MonoBehaviour
     public Player_MoveState MoveState { get; private set; }
     public Player_JumpState JumpState { get; private set; }
     public Player_FallState FallState { get; private set; }
+    public Player_WallSlideState WallSlideState { get; private set; }
 
     [Header("Movement details")]
     public float moveSpeed;
     public float jumpForce = 5;
     private bool _facingRight = true;
+    private int _facingDirection = 1;
     public Vector2 MoveInput { get; private set; }
     [Range(0, 1)]
     public float inAirMoveMultiplier = .8f;
+    [Range(0, 1)]
+    public float wallSlideMultiplier = .3f;
 
     [Header("Collision detection")]
     [SerializeField] private float groundCheckDistance;
-    [SerializeField] private LayerMask whatIsGround;
-    public bool groundDetected { get; private set; }
+    [SerializeField] private float wallCheckDistance;
+    [SerializeField] private LayerMask groundLayerMask;
+    public bool GroundDetected { get; private set; }
+    public bool WallDetected { get; private set; }
 
     private void Awake()
     {
@@ -38,6 +44,7 @@ public class Player : MonoBehaviour
         MoveState = new Player_MoveState(this, _stateMachine, "move");
         JumpState = new Player_JumpState(this, _stateMachine, "jumpFall");
         FallState = new Player_FallState(this, _stateMachine, "jumpFall");
+        WallSlideState = new Player_WallSlideState(this, _stateMachine, "wallSlide");
     }
 
     private void Start()
@@ -77,22 +84,35 @@ public class Player : MonoBehaviour
             Flip();
     }
 
-    private void Flip()
+    public void Flip()
     {
         transform.Rotate(0, 180, 0);
         _facingRight = !_facingRight;
+        _facingDirection *= -1;
     }
 
     private void HandleCollisionDetection()
     {
-        groundDetected = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance,
-            whatIsGround);
+        Vector3 origin = transform.position;
+
+        Vector2 downDirection = Vector2.down;
+        GroundDetected =
+            Physics2D.Raycast(origin, downDirection, groundCheckDistance, groundLayerMask);
+
+        Vector2 wallCheckDirection = Vector2.right * _facingDirection;
+        WallDetected =
+            Physics2D.Raycast(origin, wallCheckDirection, wallCheckDistance, groundLayerMask);
     }
 
     private void OnDrawGizmos()
     {
         Vector3 startingPoint = transform.position;
-        Vector3 endingPoint = startingPoint + new Vector3(0, -groundCheckDistance);
-        Gizmos.DrawLine(startingPoint, endingPoint);
+
+        Vector3 groundCheckPoint = startingPoint + new Vector3(0, -groundCheckDistance);
+        Gizmos.DrawLine(startingPoint, groundCheckPoint);
+
+        Vector3 wallCheckPoint =
+            startingPoint + new Vector3(wallCheckDistance * _facingDirection, 0);
+        Gizmos.DrawLine(startingPoint, wallCheckPoint);
     }
 }

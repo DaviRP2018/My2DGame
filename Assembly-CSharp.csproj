@@ -53,6 +53,7 @@
     <Compile Include="Assets\StateMachine.cs" />
     <Compile Include="Assets\Player_AirState.cs"/>
     <Compile Include="Assets\Player_JumpState.cs"/>
+    <Compile Include="Assets\Player_WallSlideState.cs"/>
     <Compile Include="Assets\Player_MoveState.cs" />
     <Compile Include="Assets\EntityState.cs" />
     <Compile Include="Assets\Player_FallState.cs"/>
