@@ -13,12 +13,14 @@ public class Player : MonoBehaviour
     public Player_JumpState JumpState { get; private set; }
     public Player_FallState FallState { get; private set; }
     public Player_WallSlideState WallSlideState { get; private set; }
+    public Player_WallJumpState WallJumpState { get; private set; }
 
     [Header("Movement details")]
     public float moveSpeed;
     public float jumpForce = 5;
+    public Vector2 wallJumpForce;
     private bool _facingRight = true;
-    private int _facingDirection = 1;
+    public int FacingDirection { get; private set; } = 1;
     public Vector2 MoveInput { get; private set; }
     [Range(0, 1)]
     public float inAirMoveMultiplier = .8f;
@@ -45,6 +47,7 @@ public class Player : MonoBehaviour
         JumpState = new Player_JumpState(this, _stateMachine, "jumpFall");
         FallState = new Player_FallState(this, _stateMachine, "jumpFall");
         WallSlideState = new Player_WallSlideState(this, _stateMachine, "wallSlide");
+        WallJumpState = new Player_WallJumpState(this, _stateMachine, "jumpFall");
     }
 
     private void Start()
@@ -88,7 +91,7 @@ public class Player : MonoBehaviour
     {
         transform.Rotate(0, 180, 0);
         _facingRight = !_facingRight;
-        _facingDirection *= -1;
+        FacingDirection *= -1;
     }
 
     private void HandleCollisionDetection()
@@ -99,7 +102,7 @@ public class Player : MonoBehaviour
         GroundDetected =
             Physics2D.Raycast(origin, downDirection, groundCheckDistance, groundLayerMask);
 
-        Vector2 wallCheckDirection = Vector2.right * _facingDirection;
+        Vector2 wallCheckDirection = Vector2.right * FacingDirection;
         WallDetected =
             Physics2D.Raycast(origin, wallCheckDirection, wallCheckDistance, groundLayerMask);
     }
@@ -112,7 +115,7 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(startingPoint, groundCheckPoint);
 
         Vector3 wallCheckPoint =
-            startingPoint + new Vector3(wallCheckDistance * _facingDirection, 0);
+            startingPoint + new Vector3(wallCheckDistance * FacingDirection, 0);
         Gizmos.DrawLine(startingPoint, wallCheckPoint);
     }
 }
