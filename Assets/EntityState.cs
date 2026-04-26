@@ -11,6 +11,8 @@ public abstract class EntityState
     protected Rigidbody2D EntityRigidbody;
     protected PlayerInputSet InputSet;
 
+    protected float StateTimer;
+
     public EntityState(Player entityPlayer, StateMachine entityStateMachine, string animBoolName)
     {
         EntityPlayer = entityPlayer;
@@ -29,11 +31,26 @@ public abstract class EntityState
 
     public virtual void Update()
     {
+        StateTimer -= Time.deltaTime;
         EntityAnimator.SetFloat(YVelocity, EntityRigidbody.linearVelocity.y);
+
+        if (InputSet.Player.Dash.WasPressedThisFrame() && CanDash())
+            EntityStateMachine.ChangeState(EntityPlayer.DashState);
     }
 
     public virtual void Exit()
     {
         EntityAnimator.SetBool(AnimBoolName, false);
+    }
+
+    private bool CanDash()
+    {
+        if (EntityPlayer.WallDetected)
+            return false;
+
+        if (EntityStateMachine.CurrentState == EntityPlayer.DashState)
+            return false;
+
+        return true;
     }
 }

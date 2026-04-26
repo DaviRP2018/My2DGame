@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public Player_FallState FallState { get; private set; }
     public Player_WallSlideState WallSlideState { get; private set; }
     public Player_WallJumpState WallJumpState { get; private set; }
+    public Player_DashState DashState { get; private set; }
 
     [Header("Movement details")]
     public float moveSpeed;
@@ -26,6 +27,9 @@ public class Player : MonoBehaviour
     public float inAirMoveMultiplier = .8f;
     [Range(0, 1)]
     public float wallSlideMultiplier = .3f;
+    [Space]
+    public float dashDuration = .25f;
+    public float dashSpeed = 20;
 
     [Header("Collision detection")]
     [SerializeField] private float groundCheckDistance;
@@ -48,6 +52,7 @@ public class Player : MonoBehaviour
         FallState = new Player_FallState(this, _stateMachine, "jumpFall");
         WallSlideState = new Player_WallSlideState(this, _stateMachine, "wallSlide");
         WallJumpState = new Player_WallJumpState(this, _stateMachine, "jumpFall");
+        DashState = new Player_DashState(this, _stateMachine, "dash");
     }
 
     private void Start()
