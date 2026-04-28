@@ -14,10 +14,10 @@ public class Player_BasicAttackState : EntityState
     public Player_BasicAttackState(Player entityPlayer, StateMachine entityStateMachine,
         string animBoolName) : base(entityPlayer, entityStateMachine, animBoolName)
     {
-        if (_comboLimit != EntityPlayer.attackVelocity.Length)
+        if (_comboLimit != EntityPlayer.attackVelocity.Length - 1)
         {
             Debug.LogWarning("Combo limit adjusted according to attack velocity array");
-            _comboLimit = EntityPlayer.attackVelocity.Length;
+            _comboLimit = EntityPlayer.attackVelocity.Length - 1;
         }
     }
 
