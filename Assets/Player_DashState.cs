@@ -12,7 +12,9 @@ public class Player_DashState : EntityState
     {
         base.Enter();
 
-        _dashDirection = EntityPlayer.FacingDirection;
+        _dashDirection = EntityPlayer.MoveInput.x != 0
+            ? (int)EntityPlayer.MoveInput.x
+            : EntityPlayer.FacingDirection;
         StateTimer = EntityPlayer.dashDuration;
 
         _originalGravityScale = EntityRigidbody.gravityScale;
